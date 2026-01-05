@@ -1,8 +1,15 @@
-name: مثال على سير العمل
-on: [push] # ينشط عند رفع أي تحديثات
+name: إنشاء أرشيف للكود
+on: [push]
 jobs:
-  مثال:
+  build-archive:
     runs-on: ubuntu-latest
     steps:
-      - name: طباعة ترحيب
-        run: echo "🎉 سير العمل يعمل بنجاح من هاتفي!"
+      - name: تحميل الكود
+        uses: actions/checkout@v3
+      - name: إنشاء أرشيف (Zip)
+        run: zip -r project_source.zip . -x "node_modules/*" ".git/*"
+      - name: رفع الأرشيف كمنتج (Artifact)
+        uses: actions/upload-artifact@v3
+        with:
+          name: project-source
+          path: project_source.zip
